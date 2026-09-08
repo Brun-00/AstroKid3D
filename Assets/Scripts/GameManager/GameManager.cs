@@ -155,7 +155,7 @@ public class GameManager : Singleton<GameManager>
     IEnumerator CheckpointTextRoutine()
     {
         checkpointText.gameObject.SetActive(true);
-        checkpointText.text = "NOVO CHECKPOINT ALCANÇADO!";
+        checkpointText.text = "NEW CHECKPOINT!";
 
         checkpointText.transform.localScale = Vector3.zero;
         checkpointText.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
