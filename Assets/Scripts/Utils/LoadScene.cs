@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LoadScene : MonoBehaviour
 {
     public void Load(int i)
     {
+        // Make sure the game is running before changing scenes.
         Time.timeScale = 1f;
-        SceneManager.LoadScene(i);
+
+        // Load the scene using its build index.
+        SceneFader.Instance.LoadSceneWithFade(i);
     }
 
     public void load(string s)
     {
-            SceneManager.LoadScene(s);
+        // Load the scene using its name.
+        SceneFader.Instance.LoadSceneWithFade(s);
     }
 }
-

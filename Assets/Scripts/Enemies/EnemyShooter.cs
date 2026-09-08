@@ -66,19 +66,6 @@ public class EnemyShooter : EnemyBase, IDamageable
 
     }
 
-    override protected void OnKill()
-    {
-        isDead = true;
-        GetComponent<BoxCollider>().enabled = false;
-        if (deathParticle != null)
-        {
-            deathParticle.Play();
-        }
-        Destroy(gameObject, 0.7f);
-        PlayAnimation(AnimationType.Death);
-
-
-    }
 }
 
 

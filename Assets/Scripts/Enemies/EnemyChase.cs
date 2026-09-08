@@ -48,18 +48,5 @@ public class EnemyChase : EnemyBase, IDamageable
 
     }
 
-    override protected void OnKill()
-    {
-        GetComponent<BoxCollider>().enabled = false;
-        if (deathParticle != null)
-        {
-            deathParticle.Play();
-        }
-        isDead = true;
-        Destroy(gameObject, 0.7f);
-        PlayAnimation(AnimationType.Death);
-
-
-    }
 }
 

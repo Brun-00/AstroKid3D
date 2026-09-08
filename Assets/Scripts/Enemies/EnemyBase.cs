@@ -21,9 +21,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public ParticleSystem deathParticle;
 
     public bool isDead = false;
+    public AudioSource deathSound;
+
+    private Vector3 originalScale;
 
     private void Awake()
     {
+        originalScale = transform.localScale;
+
         CheckPlayerNullity();
         Init();
     }
@@ -46,11 +51,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
     protected virtual void OnKill()
     {
         GetComponent<BoxCollider>().enabled = false;
-        if(deathParticle != null)
+        deathSound.pitch = Random.Range(0.6f, 1.4f);
+        deathSound.Play();
+        if (deathParticle != null)
         {
+            
             deathParticle.Play();
         }
-        Destroy(gameObject, 0.7f);
+        Destroy(gameObject, 0.8f);
         PlayAnimation(AnimationType.Death);
 
 
@@ -75,9 +83,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if(startWithSpawnAnimation)
             SpawnAnimation();
     }
-    private void SpawnAnimation()
+    protected virtual Tween SpawnAnimation()
     {
-        transform.DOScale(0, startAnimationDuration).SetEase(ease).From();
+        transform.localScale = Vector3.zero;
+
+        return transform.DOScale(
+            originalScale,
+            startAnimationDuration
+        ).SetEase(ease);
     }
 
     public void PlayAnimation(AnimationType type, bool value = true)

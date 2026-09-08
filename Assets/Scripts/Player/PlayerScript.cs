@@ -46,7 +46,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
     public float speedRun = 1.5f;
 
     [Header("Air Control")]
-    public float airControl = 0.5f;
+    public float airControl = 0.8f;
 
     [Header("MegaBullets Settings")]
     public float megaBulletDamageMultiplier = 6f;
@@ -202,6 +202,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         if (Time.time < lastDamageTime + invulnerabilityTime)
             return;
 
+        damageAudio.pitch = Random.Range(0.6f, 1.4f);
         damageAudio.Play();
 
         if (EffectsManagert.Instance != null)
@@ -370,7 +371,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
     void EnableSuperJump()
     {
         oldJumpSpeed = jumpSpeed;
-        jumpSpeed = 50f;
+        jumpSpeed = 30f;
     }
 
     void DisableSuperJump()
@@ -411,6 +412,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
         if (item.soInt.value > 0)
         {
+            healAudio.pitch = Random.Range(0.6f, 1.4f);
             healAudio.Play();
             ItemManager.Instance.RemoveByType(ItemType.LifePack, 1);
 
@@ -535,6 +537,7 @@ public class PlayerJumpState : StateBase
 
     public override void OnStateEnter(object o = null)
     {
+        player.jumpAudio.pitch = Random.Range(0.6f, 1.4f);
         player.jumpAudio.Play();
         player.vSpeed = player.jumpSpeed;
     }

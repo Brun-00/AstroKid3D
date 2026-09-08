@@ -1,4 +1,5 @@
 using Animation;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,17 +20,22 @@ public class EnemyBoss : EnemyBase, IDamageable
     public int amountPerShot = 12;
     public float angle = 8f;
 
+    public bool isSpawning = true;
+
     private void Start()
     {
         if (player == null)
         {
             player = GameManager.Instance.currentPlayer;
         }
+
     }
 
     public void Update()
     {
         if (isDead) return;
+
+        if (isSpawning) return;
 
         CheckPlayerNullity();
         if (player == null) return;
@@ -87,18 +93,14 @@ public class EnemyBoss : EnemyBase, IDamageable
         PlayAnimation(AnimationType.Attack);
     }
 
-    override protected void OnKill()
+    protected override Tween SpawnAnimation()
     {
-        isDead = true;
-        GetComponent<BoxCollider>().enabled = false;
-        if (deathParticle != null)
-        {
-            deathParticle.Play();
-        }
-        Destroy(gameObject, 0.7f);
-        PlayAnimation(AnimationType.Death);
+        isSpawning = true;
 
-
+        return base.SpawnAnimation()
+            .OnComplete(() =>
+            {
+                isSpawning = false;
+            });
     }
-
 }

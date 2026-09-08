@@ -19,11 +19,24 @@ public class ItemCollectableBase : MonoBehaviour
     protected virtual void Collect()
     {
         OnCollect();
+
         if (audioSource != null && audioSource.clip != null)
         {
-            AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
+            GameObject tempAudio = new GameObject("TempAudio");
+            tempAudio.transform.position = transform.position;
 
+            AudioSource source = tempAudio.AddComponent<AudioSource>();
+
+            source.clip = audioSource.clip;
+            source.volume = audioSource.volume;
+
+            source.pitch = Random.Range(0.6f, 1.4f);
+
+            source.Play();
+
+            Destroy(tempAudio, audioSource.clip.length / source.pitch);
         }
+
         gameObject.SetActive(false);
     }
 

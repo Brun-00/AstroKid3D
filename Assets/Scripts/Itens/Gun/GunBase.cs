@@ -23,6 +23,7 @@ public class GunBase : MonoBehaviour
 
     public virtual void Shoot()
     {
+        shootSound.pitch = Random.Range(0.6f, 1.4f);
         shootSound.Play();
         var projectile = Instantiate(projectilePrefab);
         projectile.transform.position = shootingPosition.position;
