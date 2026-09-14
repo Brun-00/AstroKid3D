@@ -22,6 +22,8 @@ public class EnemyBoss : EnemyBase, IDamageable
 
     public bool isSpawning = true;
 
+    public GameObject keyPFB;
+
     private void Start()
     {
         if (player == null)
@@ -102,5 +104,11 @@ public class EnemyBoss : EnemyBase, IDamageable
             {
                 isSpawning = false;
             });
+    }
+
+    protected override void OnKill()
+    {
+        base.OnKill();
+        keyPFB.SetActive(true);
     }
 }
