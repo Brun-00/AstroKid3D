@@ -1,8 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.PostProcessing;   
-
+using UnityEngine.Rendering.PostProcessing;
 
 public class EffectsManagert : Singleton<EffectsManagert>
 {
@@ -13,15 +12,14 @@ public class EffectsManagert : Singleton<EffectsManagert>
     [NaughtyAttributes.Button]
     public void ChangeVignette()
     {
-        
         StartCoroutine(FlashColorVignette());
     }
 
+    // Flash the vignette effect and restore its original values.
     IEnumerator FlashColorVignette()
     {
         if (postProcessVolume.profile.TryGetSettings<Vignette>(out vignette))
         {
-           
             Color originalColor = vignette.color.value;
             float originalIntensity = vignette.intensity.value;
 
@@ -40,10 +38,8 @@ public class EffectsManagert : Singleton<EffectsManagert>
                 yield return null;
             }
 
-           
             vignette.color.Override(originalColor);
             vignette.intensity.Override(originalIntensity);
         }
     }
-
 }

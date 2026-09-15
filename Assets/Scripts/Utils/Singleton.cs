@@ -6,9 +6,10 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void Awake()
     {
+        // Create the shared instance or destroy duplicates.
         if (Instance == null)
         {
-            Instance = this as T; 
+            Instance = this as T;
         }
         else
         {

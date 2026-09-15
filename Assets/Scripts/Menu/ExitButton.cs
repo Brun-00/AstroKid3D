@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ExitButton : MonoBehaviour
 {
+    // Close the application.
     public void Quit()
     {
         Application.Quit();
     }
 }
-

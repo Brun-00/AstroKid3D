@@ -11,11 +11,11 @@ public class Chest : MonoBehaviour
     public BoxCollider boxCollider;
     public AudioSource audioSource;
 
-
     public void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Player"))
-        { 
+        {
+            // Play the chest opening effects and reward the player.
             audioSource.Play();
             coinParticles.Play();
             OpenChest();
@@ -23,13 +23,11 @@ public class Chest : MonoBehaviour
             boxCollider.enabled = false;
 
             Destroy(gameObject, 1f);
-            
         }
     }
 
     public void OpenChest()
     {
-               animator.SetTrigger("Open");
-
+        animator.SetTrigger("Open");
     }
 }

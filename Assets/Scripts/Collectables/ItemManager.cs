@@ -19,12 +19,12 @@ public class ItemManager : Singleton<ItemManager>
 
     protected override void Awake()
     {
-
         base.Awake();
 
         Reset();
     }
 
+    // Reset all item values when the game starts.
     private void Reset()
     {
         foreach (var item in itemSetups)
@@ -34,17 +34,20 @@ public class ItemManager : Singleton<ItemManager>
         }
     }
 
+    // Add an amount to an item's stored value.
     public void AddByType(ItemType itemType, int amount)
     {
         itemSetups.Find(i => i.itemType == itemType).soInt.value += amount;
     }
 
+    // Remove an amount from an item's stored value.
     public void RemoveByType(ItemType itemType, int amount)
     {
         if (amount < 0) return;
         itemSetups.Find(i => i.itemType == itemType).soInt.value -= amount;
     }
 
+    // Get the setup associated with an item type.
     public ItemSetup GetItemByType(ItemType itemType)
     {
         return itemSetups.Find(i => i.itemType == itemType);

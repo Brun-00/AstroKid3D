@@ -12,9 +12,8 @@ public class DeathZoneScript : MonoBehaviour
 
             if (player != null)
             {
-
+                // Deal enough damage to instantly defeat the player.
                 player.Damage(1000f);
-
             }
         }
     }

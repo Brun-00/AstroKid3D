@@ -2,7 +2,6 @@ using UnityEngine;
 using Cinemachine;
 using System.Collections;
 
-
 public class ScreenShaker : Singleton<ScreenShaker>
 {
     public CinemachineFreeLook freeLook;
@@ -11,7 +10,7 @@ public class ScreenShaker : Singleton<ScreenShaker>
 
     protected override void Awake()
     {
-        base.Awake(); 
+        base.Awake();
 
         if (freeLook == null)
         {
@@ -37,6 +36,7 @@ public class ScreenShaker : Singleton<ScreenShaker>
 
     private Coroutine currentShake;
 
+    // Start a camera shake and replace any existing shake.
     public void Shake(float amplitude, float frequency, float duration)
     {
         if (currentShake != null)
@@ -45,6 +45,7 @@ public class ScreenShaker : Singleton<ScreenShaker>
         currentShake = StartCoroutine(ShakeCoroutine(amplitude, frequency, duration));
     }
 
+    // Temporarily increase the camera noise values.
     IEnumerator ShakeCoroutine(float amplitude, float frequency, float duration)
     {
         noise.m_AmplitudeGain = amplitude;

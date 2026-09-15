@@ -13,7 +13,7 @@ public class PlayerFlashColor : MonoBehaviour
 
     private void Start()
     {
-        // pega TODOS os renderers (Mesh + SkinnedMesh)
+        // Get all mesh and skinned mesh renderers in the player.
         renderers = GetComponentsInChildren<Renderer>();
 
         defaultColors = new Color[renderers.Length];
@@ -24,6 +24,7 @@ public class PlayerFlashColor : MonoBehaviour
         }
     }
 
+    // Flash the player's materials when taking damage.
     public void Flash()
     {
         if (_currentTween != null && _currentTween.IsActive()) return;

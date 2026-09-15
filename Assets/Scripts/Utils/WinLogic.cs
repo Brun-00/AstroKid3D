@@ -14,6 +14,7 @@ public class WinLogic : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // Disable player movement and show the win screen.
             GameManager.Instance.currentPlayer.GetComponent<PlayerScript>().characterController.enabled = false;
             winScreen.SetActive(true);
             winSound.Play();

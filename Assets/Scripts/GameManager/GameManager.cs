@@ -24,7 +24,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("UI Reference")]
     public TextMeshProUGUI lifeText;
-    public GameObject loseScreen; 
+    public GameObject loseScreen;
 
     public Transform currentPlayer;
     public PlayerHealthUpdater healthUI;
@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
         Vector3 startPos;
         Quaternion startRot;
 
+        // Load the saved player state or use the default spawn point.
         if (savedData != null)
         {
             lifes = savedData.globalLifes;
@@ -72,6 +73,7 @@ public class GameManager : Singleton<GameManager>
         UpdateLivesUI();
     }
 
+    // Set up the main game states.
     public void Init()
     {
         stateMachine = new StateMachine<GameStates>();
@@ -87,11 +89,13 @@ public class GameManager : Singleton<GameManager>
 
     public Transform currentCheckpoint;
 
+    // Store the player's current checkpoint.
     public void SetCheckpoint(Transform checkpoint)
     {
         currentCheckpoint = checkpoint;
     }
 
+    // Respawn the player and handle the remaining lives.
     public void RespawnPlayer()
     {
         lifes--;
@@ -106,7 +110,7 @@ public class GameManager : Singleton<GameManager>
             SaveManager.Instance.ClearSave();
             stateMachine.SwitchState(GameStates.LOSE);
 
-            if (loseScreen != null) loseScreen.SetActive(true); 
+            if (loseScreen != null) loseScreen.SetActive(true);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -125,6 +129,7 @@ public class GameManager : Singleton<GameManager>
         Spawn(spawnPosition, currentCheckpoint.rotation);
     }
 
+    // Update the life counter on the UI.
     void UpdateLivesUI()
     {
         if (lifeText != null)
@@ -133,6 +138,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    // Create a new player and update the camera target.
     public void Spawn(Vector3 position, Quaternion rotation)
     {
         GameObject player = Instantiate(playerPrefab, position, rotation);
@@ -146,6 +152,7 @@ public class GameManager : Singleton<GameManager>
 
     public float textDisplayDuration = 2f;
 
+    // Show the checkpoint notification.
     public void ShowCheckpointText()
     {
         StopAllCoroutines();
@@ -162,7 +169,8 @@ public class GameManager : Singleton<GameManager>
 
         yield return new WaitForSeconds(textDisplayDuration);
 
-        checkpointText.transform.DOScale(0f, 0.3f).SetEase(Ease.InBack).OnComplete(() => {
+        checkpointText.transform.DOScale(0f, 0.3f).SetEase(Ease.InBack).OnComplete(() =>
+        {
             checkpointText.gameObject.SetActive(false);
         });
     }

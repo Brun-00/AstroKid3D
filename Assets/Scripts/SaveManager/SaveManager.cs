@@ -17,6 +17,7 @@ public class SaveManager : Singleton<SaveManager>
         _saveSetup = new SaveSetup();
     }
 
+    // Save the current checkpoint, items and player health.
     public void SavePlayerState(Vector3 checkpointPos)
     {
         _saveSetup.checkpointPosition = checkpointPos;
@@ -25,12 +26,14 @@ public class SaveManager : Singleton<SaveManager>
         Save();
     }
 
+    // Clear the current checkpoint.
     public void ResetCheckpoint()
     {
         _saveSetup.hasActiveCheckpoint = false;
         Save();
     }
 
+    // Save the last completed level and reset the checkpoint.
     public void SaveLastLevel(int level)
     {
         _saveSetup.lastLevel = level;
@@ -39,6 +42,7 @@ public class SaveManager : Singleton<SaveManager>
         Save();
     }
 
+    // Store the player's current items, lives and health.
     public void SaveItemsAndHealth()
     {
         _saveSetup.coins = ItemManager.Instance.GetItemByType(ItemType.Coin).soInt.value;
@@ -52,6 +56,7 @@ public class SaveManager : Singleton<SaveManager>
         }
     }
 
+    // Delete the save file and reset the stored data.
     public void ClearSave()
     {
         if (File.Exists(path))
@@ -62,6 +67,7 @@ public class SaveManager : Singleton<SaveManager>
         Debug.Log("Save deletado - O jogador perdeu tudo.");
     }
 
+    // Convert the current save data to JSON and write it to disk.
     [NaughtyAttributes.Button("Save")]
     public void Save()
     {
@@ -69,6 +75,7 @@ public class SaveManager : Singleton<SaveManager>
         File.WriteAllText(path, setupToJson);
     }
 
+    // Load the saved data and restore the stored items.
     [NaughtyAttributes.Button("Load")]
     public SaveSetup Load()
     {

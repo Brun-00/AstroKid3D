@@ -11,7 +11,6 @@ public class SkinChanger : MonoBehaviour
     public Texture2D superJumpSkin;
     public Texture2D megaBulletsSkin;
 
-
     private Texture2D currentSkin;
 
     public void Awake()
@@ -24,8 +23,7 @@ public class SkinChanger : MonoBehaviour
         ApplySkin(defaultSkin);
     }
 
-
-
+    // Apply the selected texture to all player renderers.
     public void ApplySkin(Texture2D newSkin)
     {
         if (newSkin == null) return;
@@ -41,7 +39,6 @@ public class SkinChanger : MonoBehaviour
             mat.SetTexture("_MainTex", currentSkin);
 
             mat.SetTexture("_EmissionMap", currentSkin);
-
         }
     }
 }

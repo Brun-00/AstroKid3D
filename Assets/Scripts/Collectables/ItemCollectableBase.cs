@@ -8,7 +8,6 @@ public class ItemCollectableBase : MonoBehaviour
     public ParticleSystem particlePrefab;
     public AudioSource audioSource;
 
-
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.transform.CompareTag(compareTag))
@@ -16,6 +15,8 @@ public class ItemCollectableBase : MonoBehaviour
             Collect();
         }
     }
+
+    // Handles the general collection process.
     protected virtual void Collect()
     {
         OnCollect();
@@ -40,16 +41,15 @@ public class ItemCollectableBase : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    // Handles effects triggered when the item is collected.
     protected virtual void OnCollect()
     {
-
         if (particlePrefab != null)
         {
             ParticleSystem ps = Instantiate(particlePrefab, transform.position, Quaternion.identity);
             ps.Play();
 
             Destroy(ps.gameObject, 5);
-            
         }
     }
 }

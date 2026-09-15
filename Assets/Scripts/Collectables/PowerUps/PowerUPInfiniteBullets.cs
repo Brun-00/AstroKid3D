@@ -5,6 +5,7 @@ using static PlayerScript;
 
 public class PowerUPInfiniteBullets : PowerUPBase
 {
+    // Apply the Infinite Bullets power-up to the current player.
     protected override void StartPowerUp()
     {
         GameManager.Instance.currentPlayer.GetComponent<PlayerScript>().ApplyPowerUp(PowerUpType.InfiniteBullets, duration);

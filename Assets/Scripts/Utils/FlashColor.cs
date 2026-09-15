@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+
 public class FlashColor : MonoBehaviour
 {
     public MeshRenderer meshRenderer;
-
 
     public Color color = Color.red;
     public float duration = 0.1f;
@@ -14,19 +14,17 @@ public class FlashColor : MonoBehaviour
 
     private Tween _currentTween;
 
-        private void Start()
+    private void Start()
     {
         defaultColor = meshRenderer.material.GetColor("_EmissionColor");
     }
 
-
+    // Flash the material color when the object is damaged.
     public void Flash()
     {
-        if(!_currentTween.IsActive())
+        if (!_currentTween.IsActive())
         {
-           _currentTween = meshRenderer.material.DOColor(color,"_EmissionColor", duration).SetLoops(2,LoopType.Yoyo);
+            _currentTween = meshRenderer.material.DOColor(color, "_EmissionColor", duration).SetLoops(2, LoopType.Yoyo);
         }
-        
-
     }
 }

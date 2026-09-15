@@ -6,13 +6,13 @@ using Animation;
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
-   public AnimationBase animationBase;
+    public AnimationBase animationBase;
     public float health = 10f;
     public Transform player;
 
     public FlashColor flashColor;
 
-    [SerializeField]private float _currentHealth;
+    [SerializeField] private float _currentHealth;
 
     public float startAnimationDuration = 0.5f;
     public Ease ease = Ease.OutBack;
@@ -32,47 +32,51 @@ public class EnemyBase : MonoBehaviour, IDamageable
         CheckPlayerNullity();
         Init();
     }
+
     protected virtual void Init()
     {
         ResetLife();
     }
 
+    // Reset the enemy's health and spawn state.
     protected void ResetLife()
     {
         _currentHealth = health;
         Spawn();
     }
+
     protected virtual void Kill()
     {
-        
         OnKill();
     }
 
+    // Handle the enemy death effects and cleanup.
     protected virtual void OnKill()
     {
         GetComponent<BoxCollider>().enabled = false;
         deathSound.pitch = Random.Range(0.6f, 1.4f);
         deathSound.Play();
+
         if (deathParticle != null)
         {
-            
             deathParticle.Play();
         }
+
         Destroy(gameObject, 0.8f);
         PlayAnimation(AnimationType.Death);
+    }
 
-
-    }   
-
+    // Apply damage and check if the enemy should be defeated.
     public void OnDamage(float f)
     {
-        if(flashColor != null)
+        if (flashColor != null)
         {
             flashColor.Flash();
         }
+
         _currentHealth -= f;
 
-        if(_currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             Kill();
         }
@@ -80,9 +84,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void Spawn()
     {
-        if(startWithSpawnAnimation)
+        if (startWithSpawnAnimation)
             SpawnAnimation();
     }
+
+    // Play the enemy's spawn animation.
     protected virtual Tween SpawnAnimation()
     {
         transform.localScale = Vector3.zero;
@@ -98,12 +104,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
         animationBase.PlayAnimation(type, value);
     }
 
-
     public void Damage(float damage)
     {
         OnDamage(damage);
     }
 
+    // Trigger the attack animation when the player is touched.
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -112,6 +118,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    // Find the player if the current reference is missing.
     public void CheckPlayerNullity()
     {
         if (player == null)
@@ -122,6 +129,4 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 player = p.transform;
         }
     }
-
-
 }

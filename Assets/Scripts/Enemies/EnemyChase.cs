@@ -5,19 +5,18 @@ using UnityEngine;
 
 public class EnemyChase : EnemyBase, IDamageable
 {
-    
     public float speed = 5f;
     public float range;
 
     private void Start()
     {
-        if(player == null)
+        if (player == null)
         {
             player = GameManager.Instance.currentPlayer;
         }
     }
 
-     public void Update()
+    public void Update()
     {
         if (isDead) return;
 
@@ -35,6 +34,7 @@ public class EnemyChase : EnemyBase, IDamageable
             direction.y = 0f;
             direction = direction.normalized;
 
+            // Move toward the player while keeping the enemy level.
             transform.position += direction * speed * Time.deltaTime;
 
             if (direction != Vector3.zero)
@@ -42,11 +42,9 @@ public class EnemyChase : EnemyBase, IDamageable
                 transform.forward = direction;
             }
         }
-        else {
+        else
+        {
             PlayAnimation(AnimationType.Run, false);
-             }
-
+        }
     }
-
 }
-

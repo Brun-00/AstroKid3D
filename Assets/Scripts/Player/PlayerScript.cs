@@ -26,7 +26,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
     public AudioSource jumpAudio;
     public AudioSource damageAudio;
     public AudioSource healAudio;
-    
+
     [Header("PlayerSettings")]
     public float speed = 1f;
     public float turnSpeed = 1f;
@@ -40,7 +40,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
     [Header("PlayerInnerInfo")]
     [SerializeField] private float _currentHealth;
     [SerializeField] private float invulnerabilityTime = 0.5f;
-    
+
     [Header("Run Setup")]
     public KeyCode keyRun = KeyCode.LeftShift;
     public float speedRun = 1.5f;
@@ -58,19 +58,18 @@ public class PlayerScript : MonoBehaviour, IDamageable
         InfiniteBullets,
         SuperJump,
         MegaBullets,
-        
-
     }
+
     public class ActivePowerUp
     {
         public PowerUpType type;
         public float timer;
     }
+
     private List<ActivePowerUp> activePowerUps = new List<ActivePowerUp>();
     private SkinChanger skinChanger;
     private PowerUpType? lastPowerUp = null;
     #endregion
-
 
     private float lastDamageTime = -Mathf.Infinity;
     private bool isDead = false;
@@ -80,20 +79,17 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     void Awake()
     {
-
         characterController = GetComponent<CharacterController>();
         characterController.enabled = true;
 
         skinChanger = GetComponent<SkinChanger>();
-
-
     }
 
     public void Start()
     {
- 
         if (_currentHealth <= 0) _currentHealth = health;
 
+        // Initialize the player's state machine.
         stateMachine = new StateMachine<PlayerState>();
         stateMachine.Init();
 
@@ -106,18 +102,18 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
         if (healthUI != null)
         {
-
             healthUI.UpdateValue(maxHealth, _currentHealth);
         }
     }
+
     void Update()
     {
         if (isDead) return;
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        // Toggle the pause menu using the Escape key.
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-
-            if(PauseManager.Instance.isPaused)
+            if (PauseManager.Instance.isPaused)
             {
                 PauseManager.Instance.Resume();
             }
@@ -127,10 +123,10 @@ public class PlayerScript : MonoBehaviour, IDamageable
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.H)) 
-        { 
-            
-            Heal(); 
+        // Test healing through the H key.
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Heal();
         }
 
         if (characterController == null || !characterController.enabled) return;
@@ -140,6 +136,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         stateMachine.Update();
     }
 
+    // Apply a power-up or extend an existing one.
     public void ApplyPowerUp(PowerUpType type, float duration, float value = 0f)
     {
         var existing = activePowerUps.Find(p => p.type == type);
@@ -154,10 +151,11 @@ public class PlayerScript : MonoBehaviour, IDamageable
             StartPowerUp(type, value);
         }
 
-        
         lastPowerUp = type;
         UpdateSkin();
     }
+
+    // Update all active power-up timers.
     void UpdatePowerUps()
     {
         for (int i = activePowerUps.Count - 1; i >= 0; i--)
@@ -168,27 +166,28 @@ public class PlayerScript : MonoBehaviour, IDamageable
             {
                 var type = activePowerUps[i].type;
 
-                activePowerUps.RemoveAt(i);   
-                EndPowerUp(type);             
+                activePowerUps.RemoveAt(i);
+                EndPowerUp(type);
             }
         }
     }
 
+    // Return the player's current health.
     public float GetCurrentHealth()
     {
         return _currentHealth;
     }
 
+    // Set the player's current health and update the UI.
     public void SetCurrentHealth(float value)
     {
         _currentHealth = value;
         if (healthUI != null) healthUI.UpdateValue(maxHealth, _currentHealth);
     }
 
-
-
     #region Damage and Death Logic
 
+    // Apply damage to the player.
     public void Damage(float damage)
     {
         OnDamage(damage);
@@ -196,9 +195,6 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     public void OnDamage(float f)
     {
-        
-
-       
         if (Time.time < lastDamageTime + invulnerabilityTime)
             return;
 
@@ -229,6 +225,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         {
             flashColor.Flash();
         }
+
         _currentHealth -= f;
 
         if (healthUI != null)
@@ -245,10 +242,10 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
     protected virtual void Kill()
     {
-
         OnKill();
     }
 
+    // Disable the player and request a respawn from the GameManager.
     protected virtual void OnKill()
     {
         isDead = true;
@@ -260,6 +257,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
+    // Take damage when colliding with an enemy.
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.CompareTag("Enemy"))
@@ -267,9 +265,12 @@ public class PlayerScript : MonoBehaviour, IDamageable
             OnDamage(1);
         }
     }
+
     #endregion
 
     #region PowerUp Logic
+
+    // Activate the effect associated with a power-up type.
     private void StartPowerUp(PowerUpType type, float value)
     {
         switch (type)
@@ -285,17 +286,16 @@ public class PlayerScript : MonoBehaviour, IDamageable
             case PowerUpType.MegaBullets:
                 EnableMegaBullets();
                 break;
-
-
         }
     }
 
+    // Disable the effect associated with a power-up type.
     private void EndPowerUp(PowerUpType type)
     {
         switch (type)
         {
             case PowerUpType.InfiniteBullets:
-                DisableInfiniteBullets(); 
+                DisableInfiniteBullets();
                 break;
 
             case PowerUpType.SuperJump:
@@ -305,15 +305,15 @@ public class PlayerScript : MonoBehaviour, IDamageable
             case PowerUpType.MegaBullets:
                 DisableMegaBullets();
                 break;
-
-
         }
+
         UpdateLastPowerUp();
         UpdateSkin();
-
     }
+
     #endregion
 
+    // Update the power-up that should currently determine the player's skin.
     void UpdateLastPowerUp()
     {
         if (activePowerUps.Count == 0)
@@ -325,6 +325,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         lastPowerUp = activePowerUps[activePowerUps.Count - 1].type;
     }
 
+    // Apply the skin associated with the current power-up.
     void UpdateSkin()
     {
         if (skinChanger == null)
@@ -355,41 +356,44 @@ public class PlayerScript : MonoBehaviour, IDamageable
         }
     }
 
-
     #region PowerUp Methods
+
+    // Enable infinite ammunition.
     void EnableInfiniteBullets()
     {
         isInfiniteBulletsActive = true;
-
     }
 
+    // Disable infinite ammunition.
     void DisableInfiniteBullets()
     {
         isInfiniteBulletsActive = false;
     }
 
+    // Increase the player's jump strength.
     void EnableSuperJump()
     {
         oldJumpSpeed = jumpSpeed;
         jumpSpeed = 30f;
     }
 
+    // Restore the player's original jump strength.
     void DisableSuperJump()
     {
         jumpSpeed = oldJumpSpeed;
     }
 
+    // Enable the Mega Bullets effect.
     void EnableMegaBullets()
     {
         isMegaBulletsActive = true;
     }
 
+    // Disable the Mega Bullets effect.
     void DisableMegaBullets()
     {
         isMegaBulletsActive = false;
     }
-
-    
 
     public bool IsMegaBulletsActive()
     {
@@ -401,7 +405,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
         return isInfiniteBulletsActive;
     }
 
-    #endregion  
+    #endregion
 
     public void Heal()
     {
@@ -412,6 +416,7 @@ public class PlayerScript : MonoBehaviour, IDamageable
 
         if (item.soInt.value > 0)
         {
+            // Consume a life pack and restore the player's health.
             healAudio.pitch = Random.Range(0.6f, 1.4f);
             healAudio.Play();
             ItemManager.Instance.RemoveByType(ItemType.LifePack, 1);
@@ -427,9 +432,6 @@ public class PlayerScript : MonoBehaviour, IDamageable
             }
         }
     }
-
-
-
 }
 
 public class PlayerIdleState : StateBase
@@ -441,6 +443,7 @@ public class PlayerIdleState : StateBase
         this.player = player;
     }
 
+    // Enter the idle animation state.
     public override void OnStateEnter(object o = null)
     {
         player.animator.SetBool("Run", false);
@@ -448,9 +451,9 @@ public class PlayerIdleState : StateBase
 
     public override void OnStateStay(object o = null)
     {
-
+        // Keep the player grounded and apply gravity.
         if (player.characterController.isGrounded && player.vSpeed < 0)
-            player.vSpeed = -2f; 
+            player.vSpeed = -2f;
 
         player.vSpeed -= player.gravity * Time.deltaTime;
 
@@ -480,6 +483,7 @@ public class PlayerMoveState : StateBase
         this.player = player;
     }
 
+    // Enter the running animation state.
     public override void OnStateEnter(object o = null)
     {
         player.animator.SetBool("Run", true);
@@ -489,6 +493,7 @@ public class PlayerMoveState : StateBase
     {
         float input = Input.GetAxis("Vertical");
 
+        // Rotate the player according to horizontal input.
         player.transform.Rotate(0, Input.GetAxis("Horizontal") * player.turnSpeed * Time.deltaTime, 0);
 
         var move = player.transform.forward * input * player.speed;
@@ -499,6 +504,7 @@ public class PlayerMoveState : StateBase
         player.vSpeed -= player.gravity * Time.deltaTime;
         move.y = player.vSpeed;
 
+        // Apply the run boost while the run key is held.
         if (Input.GetKey(player.keyRun))
         {
             player.trailRenderer.enabled = true;
@@ -529,12 +535,12 @@ public class PlayerJumpState : StateBase
 {
     private PlayerScript player;
 
-
     public PlayerJumpState(PlayerScript player)
     {
         this.player = player;
     }
 
+    // Start the jump and play the jump sound.
     public override void OnStateEnter(object o = null)
     {
         player.jumpAudio.pitch = Random.Range(0.6f, 1.4f);
@@ -544,10 +550,10 @@ public class PlayerJumpState : StateBase
 
     public override void OnStateStay(object o = null)
     {
-        
         float inputVertical = Input.GetAxis("Vertical");
         float inputHorizontal = Input.GetAxis("Horizontal");
 
+        // Allow reduced movement and rotation while airborne.
         player.transform.Rotate(0, inputHorizontal * player.turnSpeed * Time.deltaTime, 0);
 
         var move = player.transform.forward * inputVertical * player.speed;
@@ -578,10 +584,10 @@ public class PlayerDeadState : StateBase
         this.player = player;
     }
 
+    // Disable movement and trigger the death animation.
     public override void OnStateEnter(object o = null)
     {
         player.characterController.enabled = false;
         player.animator.SetTrigger("Death");
-        
     }
 }

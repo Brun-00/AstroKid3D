@@ -14,9 +14,10 @@ public class Camera : MonoBehaviour
         HandleRotation();
     }
 
+    // Handle camera rotation based on mouse movement.
     void HandleRotation()
     {
-        if (Input.GetMouseButton(0)) 
+        if (Input.GetMouseButton(0))
         {
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");

@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class GunShootAngle : GunShootLimit
 {
-
     public int amountPerShot = 4;
     public float angle = 15f;
 
+    // Fire multiple projectiles in a spread pattern.
     public override void Shoot()
     {
         int mult = 0;
-
 
         for (int i = 0; i < amountPerShot; i++)
         {
@@ -20,7 +19,7 @@ public class GunShootAngle : GunShootLimit
             {
                 mult++;
             }
-            
+
             shootSound.pitch = Random.Range(0.6f, 1.4f);
             shootSound.Play();
             var projectile = Instantiate(projectilePrefab, shootingPosition);
@@ -37,10 +36,10 @@ public class GunShootAngle : GunShootLimit
                     GameManager.Instance.currentPlayer.GetComponent<PlayerScript>().megaBulletDamageMultiplier,
                     GameManager.Instance.currentPlayer.GetComponent<PlayerScript>().megaBulletSizeMultiplier
                 );
+
             }
 
         }
-
 
     }
 }

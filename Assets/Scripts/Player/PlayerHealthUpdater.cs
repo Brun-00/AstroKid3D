@@ -19,11 +19,13 @@ public class PlayerHealthUpdater : MonoBehaviour
         }
     }
 
+    // Update the health bar fill directly.
     public void UpdateValue(float f)
     {
         uiImage.fillAmount = f;
     }
 
+    // Animate the health bar based on the current health.
     public void UpdateValue(float max, float current)
     {
         if (_currentTween != null)

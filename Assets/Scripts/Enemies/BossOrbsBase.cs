@@ -11,9 +11,9 @@ public class BossOrbsBase : MonoBehaviour
 
     void Update()
     {
+        // Rotate the orb around the boss.
         transform.RotateAround(boss.position, Vector3.up, rotationSpeed * Time.deltaTime);
     }
-
 
     private void OnTriggerEnter(Collider other)
     {

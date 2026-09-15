@@ -4,9 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBoss : EnemyBase, IDamageable 
+public class EnemyBoss : EnemyBase, IDamageable
 {
-    
     public float speed = 5f;
     public float range;
     public ProjectileBase projectilePrefab;
@@ -30,7 +29,6 @@ public class EnemyBoss : EnemyBase, IDamageable
         {
             player = GameManager.Instance.currentPlayer;
         }
-
     }
 
     public void Update()
@@ -52,6 +50,7 @@ public class EnemyBoss : EnemyBase, IDamageable
             direction.y = 0f;
             direction = direction.normalized;
 
+            // Move toward the player while keeping the boss grounded.
             transform.position += direction * speed * Time.deltaTime;
 
             if (direction != Vector3.zero)
@@ -69,9 +68,9 @@ public class EnemyBoss : EnemyBase, IDamageable
         {
             PlayAnimation(AnimationType.Run, false);
         }
-
     }
 
+    // Fire a spread of projectiles around the boss.
     public void Shoot()
     {
         int mult = 0;
@@ -95,6 +94,7 @@ public class EnemyBoss : EnemyBase, IDamageable
         PlayAnimation(AnimationType.Attack);
     }
 
+    // Prevent normal movement until the spawn animation is complete.
     protected override Tween SpawnAnimation()
     {
         isSpawning = true;
@@ -106,6 +106,7 @@ public class EnemyBoss : EnemyBase, IDamageable
             });
     }
 
+    // Spawn the boss key after the boss is defeated.
     protected override void OnKill()
     {
         base.OnKill();

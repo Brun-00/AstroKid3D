@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class EnemyShooter : EnemyBase, IDamageable
 {
-    
     public float range;
     public ProjectileBase projectilePrefab;
     public Transform shootingPosition;
@@ -32,19 +31,19 @@ public class EnemyShooter : EnemyBase, IDamageable
         float distance = Vector3.Distance(transform.position, player.position);
 
         PlayAnimation(AnimationType.Run, false);
+
         if (distance <= range)
         {
-
             Vector3 direction = (player.position - transform.position).normalized;
 
             Vector3 flatDirection = direction;
             flatDirection.y = 0f;
 
+            // Rotate toward the player without affecting the vertical axis.
             if (flatDirection != Vector3.zero)
             {
                 transform.forward = flatDirection;
             }
-
 
             if (distance <= range && Time.time >= nextShootTime)
             {
@@ -52,10 +51,9 @@ public class EnemyShooter : EnemyBase, IDamageable
                 nextShootTime = Time.time + cooldownTime;
             }
         }
-    
-           
     }
 
+    // Create and fire a projectile toward the player.
     public void Shoot()
     {
         var projectile = Instantiate(projectilePrefab);
@@ -63,10 +61,5 @@ public class EnemyShooter : EnemyBase, IDamageable
         projectile.transform.rotation = shootingPosition.rotation;
         projectile.speed = speed;
         PlayAnimation(AnimationType.Attack);
-
     }
-
 }
-
-
-

@@ -5,7 +5,6 @@ using System.Linq;
 
 public class GunShootLimit : GunBase
 {
-
     public List<GunUIUpdater> GunUIUpdater;
     public float maxShots = 10;
     public float reloadTime = 2f;
@@ -13,8 +12,6 @@ public class GunShootLimit : GunBase
     private bool _recharging = false;
 
     private float _currentShots;
-
-
 
     private void Awake()
     {
@@ -48,12 +45,12 @@ public class GunShootLimit : GunBase
                     CheckRecharge();
                 }
 
- 
                 yield return new WaitForSeconds(timeBetweenShots);
             }
         }
     }
 
+    // Check whether the gun has reached its shot limit.
     private void CheckRecharge()
     {
         if (GameManager.Instance.currentPlayer.GetComponent<PlayerScript>().IsInfiniteBulletsActive())
@@ -66,29 +63,34 @@ public class GunShootLimit : GunBase
         }
     }
 
+    // Start the gun recharge process.
     private void StartRecharge()
     {
         _recharging = true;
         StartCoroutine(RechargeCoroutine());
     }
 
+    // Refill the gun while updating the UI.
     IEnumerator RechargeCoroutine()
     {
         float time = 0;
 
-        while(time <reloadTime)
-        {   time += Time.deltaTime;
-            GunUIUpdater.ForEach(i => i.UpdateValue(time/reloadTime));
+        while (time < reloadTime)
+        {
+            time += Time.deltaTime;
+            GunUIUpdater.ForEach(i => i.UpdateValue(time / reloadTime));
             yield return new WaitForEndOfFrame();
         }
+
         _currentShots = 0;
         _recharging = false;
     }
 
+    // Update the gun UI based on its current state.
     public void UpdateUI()
     {
         if (_recharging)
-            return; 
+            return;
 
         if (GameManager.Instance.currentPlayer.GetComponent<PlayerScript>().IsInfiniteBulletsActive())
         {
@@ -103,13 +105,9 @@ public class GunShootLimit : GunBase
         });
     }
 
-
+    // Find all gun UI elements currently in the scene.
     private void GetAllUIs()
     {
-            GunUIUpdater = GameObject.FindObjectsOfType<GunUIUpdater>().ToList();
+        GunUIUpdater = GameObject.FindObjectsOfType<GunUIUpdater>().ToList();
     }
-
-
-
-
 }

@@ -15,9 +15,9 @@ public class BossSpawner : MonoBehaviour
         }
     }
 
+    // Activate the boss when the player reaches the trigger.
     public void SpawnBoss()
     {
         bossPrefab.SetActive(true);
     }
 }
-

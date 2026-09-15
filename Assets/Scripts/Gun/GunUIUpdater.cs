@@ -15,26 +15,30 @@ public class GunUIUpdater : MonoBehaviour
 
     private void OnValidate()
     {
-        if(uiImage == null)
+        if (uiImage == null)
         {
             uiImage = GetComponent<Image>();
         }
     }
+
+    // Update the UI fill directly.
     public void UpdateValue(float f)
     {
         uiImage.fillAmount = f;
     }
 
+    // Animate the UI fill based on the remaining shots.
     public void UpdateValue(float max, float current)
     {
-        if(_currentTween != null)
+        if (_currentTween != null)
         {
             _currentTween.Kill();
         }
 
-        uiImage.DOFillAmount(1-(current/max),duration).SetEase(ease);
+        uiImage.DOFillAmount(1 - (current / max), duration).SetEase(ease);
     }
 
+    // Show the infinite bullets state.
     public void ShowInfinite()
     {
         if (_currentTween != null)
@@ -42,10 +46,11 @@ public class GunUIUpdater : MonoBehaviour
             _currentTween.Kill();
         }
 
-        uiImage.fillAmount = 1f; 
+        uiImage.fillAmount = 1f;
         uiImage.color = Color.yellow;
     }
 
+    // Restore the normal gun UI.
     public void ShowNormal()
     {
         uiImage.color = Color.green;

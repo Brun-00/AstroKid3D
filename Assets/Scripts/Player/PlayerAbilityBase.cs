@@ -10,7 +10,7 @@ public class PlayerAbilityBase : MonoBehaviour
 
     private void OnValidate()
     {
-        if(player == null)
+        if (player == null)
         {
             player = GetComponentInParent<PlayerScript>();
         }
@@ -18,7 +18,6 @@ public class PlayerAbilityBase : MonoBehaviour
 
     private void Start()
     {
-
         inputs = new Inputs();
         inputs.Enable();
         Init();
@@ -28,7 +27,7 @@ public class PlayerAbilityBase : MonoBehaviour
 
     private void OnEnable()
     {
-        if(inputs != null)
+        if (inputs != null)
         {
             inputs.Enable();
         }
@@ -42,16 +41,18 @@ public class PlayerAbilityBase : MonoBehaviour
         }
     }
 
+    // Initialize the ability.
     protected virtual void Init()
     {
         RemoveveListeners();
     }
 
+    // Register input or gameplay listeners for the ability.
     protected virtual void RegisterListeners()
     {
-
     }
 
+    // Remove input or gameplay listeners from the ability.
     protected virtual void RemoveveListeners()
     {
     }

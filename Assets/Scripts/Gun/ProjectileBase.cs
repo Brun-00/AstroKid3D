@@ -20,6 +20,7 @@ public class ProjectileBase : MonoBehaviour
 
     public void Update()
     {
+        // Move the projectile forward at a constant speed.
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
     }
 
@@ -27,13 +28,12 @@ public class ProjectileBase : MonoBehaviour
     {
         var damageable = collision.gameObject.GetComponent<IDamageable>();
 
-        if(damageable != null) damageable.Damage(damage);
-
+        if (damageable != null) damageable.Damage(damage);
 
         Destroy(gameObject);
-
     }
 
+    // Apply custom damage, size and Mega Bullets effects.
     public void Setup(float newDamage, float scaleMultiplier)
     {
         float finalDamage = newDamage;

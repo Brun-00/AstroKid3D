@@ -6,7 +6,7 @@ public class PowerUPBase : ItemCollectableBase
     [Header("Power Up")]
     public float duration;
 
-
+    // Start the power-up and play its collection effect.
     protected override void OnCollect()
     {
         Transform player = GameManager.Instance.currentPlayer.GetComponent<PlayerScript>()?.transform;
@@ -23,18 +23,17 @@ public class PowerUPBase : ItemCollectableBase
 
         StartPowerUp();
 
-        base.OnCollect(); 
+        base.OnCollect();
     }
+
+    // Start the power-up duration timer.
     protected virtual void StartPowerUp()
     {
         Invoke(nameof(EndPowerUp), duration);
-
-
     }
 
+    // Called when the power-up duration ends.
     protected virtual void EndPowerUp()
     {
-
-
     }
 }

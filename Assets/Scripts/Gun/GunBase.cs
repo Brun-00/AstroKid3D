@@ -14,13 +14,14 @@ public class GunBase : MonoBehaviour
 
     protected virtual IEnumerator StartShoot()
     {
-        while(true)
+        while (true)
         {
             Shoot();
             yield return new WaitForSeconds(timeBetweenShots);
         }
     }
 
+    // Create and fire a standard projectile.
     public virtual void Shoot()
     {
         shootSound.pitch = Random.Range(0.6f, 1.4f);
@@ -37,15 +38,16 @@ public class GunBase : MonoBehaviour
                 GameManager.Instance.currentPlayer.GetComponent<PlayerScript>().megaBulletSizeMultiplier
             );
         }
-
     }
 
+    // Start continuously firing the weapon.
     public void StartShooting()
     {
         StopShooting();
         _currentCoroutine = StartCoroutine(StartShoot());
     }
 
+    // Stop the current shooting coroutine.
     public void StopShooting()
     {
         if (_currentCoroutine != null)
@@ -53,7 +55,4 @@ public class GunBase : MonoBehaviour
             StopCoroutine(_currentCoroutine);
         }
     }
-
-
-
 }

@@ -4,26 +4,26 @@ using UnityEngine;
 
 namespace Animation
 {
-
     public enum AnimatorParameterType
     {
         Trigger,
         Bool
     }
+
     public enum AnimationType
     {
         Run,
         Attack,
         Death
     }
+
     public class AnimationBase : MonoBehaviour
     {
         public List<AnimationSetup> animationSetups;
 
         public Animator animator;
 
-
-
+        // Play the animation associated with the selected type.
         public void PlayAnimation(AnimationType type, bool boolValue = true)
         {
             var setup = animationSetups.Find(i => i.type == type);
@@ -50,5 +50,4 @@ namespace Animation
         public string parameterName;
         public AnimatorParameterType parameterType;
     }
-
 }
