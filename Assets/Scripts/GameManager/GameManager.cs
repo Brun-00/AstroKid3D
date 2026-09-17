@@ -83,7 +83,7 @@ public class GameManager : Singleton<GameManager>
         stateMachine.RegisterStates(GameStates.WIN, new StateBase());
         stateMachine.RegisterStates(GameStates.LOSE, new StateBase());
 
-        stateMachine.SwitchState(GameStates.INTRO);
+        stateMachine.SwitchState(GameStates.GAMEPLAY);
     }
 
     public Transform currentCheckpoint;
